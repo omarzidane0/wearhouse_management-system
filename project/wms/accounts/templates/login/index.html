@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Exceptional Login • Neo Green</title>
+<style>
+:root{
+  --bg:#d4f7dc;
+  --bg-2:#b8f0c7;
+  --fg:#111827; /* لون النصوص الأساسي */
+  --muted:#5b6b7b;
+  --primary:#22c55e;
+  --primary-2:#16a34a;
+  --accent:#4ade80;
+  --card:rgba(255,255,255,.8);
+  --glass:rgba(255,255,255,.85);
+  --border:rgba(0,0,0,.1);
+  --shadow: 0 8px 20px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+body{
+  margin:0; font-family:ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial; color:var(--fg);
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh;
+  background: linear-gradient(180deg, var(--bg), var(--bg-2));
+}
+
+.card{
+  width:min(400px,90vw); border-radius:12px; padding:32px 28px;
+  background: linear-gradient(180deg, var(--glass), var(--card));
+  box-shadow: var(--shadow); backdrop-filter: blur(12px) saturate(120%);
+  display:flex; flex-direction:column; gap:20px; align-items:center;
+  border:1px solid var(--border);
+}
+
+.header{ text-align:center; }
+.header .badge{
+  display:inline-block; padding:6px 12px; border-radius:999px; font-size:12px;
+  background: rgba(34,197,94,.2); color:var(--fg); font-weight:600; margin-bottom:16px;
+}
+.header h1{ font-size:28px; margin:8px 0 4px; letter-spacing:.4px; }
+.header p.sub{ color:var(--muted); font-size:14px; margin:0; }
+
+.av{
+  width:90px; height:90px; border-radius:50%; margin:0 auto 16px;
+  background: radial-gradient(circle at 30% 30%, #9ae6b4, #22c55e);
+  display:grid; place-items:center; box-shadow: 0 3px 10px rgba(34,197,94,0.25), 0 10px 20px rgba(0,0,0,.15);
+  position:relative; overflow:hidden;
+}
+.av::after{
+  content:""; position:absolute; inset:-6px; border-radius:50%;
+  background: conic-gradient(from 0deg, #22c55e, #86efac, #22c55e);
+  mask: radial-gradient(circle at 50% 50%, transparent 60px, black 60px);
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 60px, black 60px);
+  animation: spin 20s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg) } }
+
+.form{ display:flex; flex-direction:column; gap:14px; width:100%; }
+
+.field{
+  display:flex; align-items:center; gap:10px; padding:14px 16px;
+  border:1px solid var(--border); border-radius:14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.3), rgba(255,255,255,.25));
+  transition: all .2s ease;
+}
+.field input{ flex:1; background:transparent; border:none; outline:none; color:var(--fg); font-size:15px; }
+.field:focus-within{ border-color: var(--accent); box-shadow: 0 0 6px var(--accent); }
+
+.row{ display:flex; justify-content:space-between; align-items:center; font-size:14px; width:100%; }
+.row a.link{ color:var(--accent); font-weight:600; text-decoration:none; }
+.row a.link:hover{ text-decoration:underline; }
+
+.btn{
+  width:100%; padding:14px; border:none; border-radius:999px; font-weight:700; letter-spacing:.3px;
+  background: linear-gradient(180deg, #4ade80, #22c55e);
+  color: var(--fg);
+  cursor:pointer; box-shadow: 0 4px 12px rgba(34,197,94,.25);
+  transition: all .2s ease;
+}
+.btn:hover{
+  background: linear-gradient(180deg, #86efac, #22c55e);
+}
+
+#alert-msg{
+  display:none; 
+  color:#b91c1c; 
+  background:#fee2e2; 
+  padding:10px 14px; 
+  border-radius:8px; 
+  font-size:14px; 
+  margin-bottom:12px;
+}
+
+.meta{ text-align:center; font-size:13px; color:var(--muted); margin-top:8px; }
+.meta a.link{ font-weight:700; color:var(--accent); }
+
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="header">
+    <span class="badge"></span>
+    <h1>WELCOME</h1>
+    <p class="sub">Sign in to your account</p>
+  </div>
+
+  <form id="login-form" class="form" action="#" method="post" novalidate>
+    {% csrf_token %}
+   
+    <div class="field">
+      <input id="user" name="username" type="text" placeholder="Username" required/>
+    </div>
+    <div class="field">
+      <input id="pass" name="password" type="password" placeholder="Password" required/>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" name="remember"> Remember me</label>
+      <a class="link" href="#">Forgot password?</a>
+    </div>
+     <div id="alert-msg"></div>
+    <button class="btn" type="submit">LOGIN</button>
+    
+    <p class="meta">Don't have an account? <a class="link" href="#">Sign up</a></p>
+  </form>
+</div>
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
