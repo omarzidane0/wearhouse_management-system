@@ -96,7 +96,10 @@ body{
 
 .meta{ text-align:center; font-size:13px; color:var(--muted); margin-top:8px; }
 .meta a.link{ font-weight:700; color:var(--accent); }
-
+ a {
+  text-decoration: none;
+  color: inherit; /* عشان ياخد نفس لون النص */
+}
 </style>
 </head>
 <body>
@@ -119,12 +122,12 @@ body{
     </div>
     <div class="row">
       <label><input type="checkbox" name="remember"> Remember me</label>
-      <a class="link" href="#">Forgot password?</a>
+      <a class="link" href="{% url 'reset_password'%}">Forgot password?</a>
     </div>
      <div id="alert-msg"></div>
     <button class="btn" type="submit">LOGIN</button>
     
-    <p class="meta">Don't have an account? <a class="link" href="#">Sign up</a></p>
+    <p class="meta">Don't have an account? <a class="link" href="{% url 'sign_up_warn'%}">Sign up</a></p>
   </form>
 </div>
 <script src="{% static 'js/script.js' %}"></script>

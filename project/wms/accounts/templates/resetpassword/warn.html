@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Exceptional Login • Neo Green</title>
+<style>
+:root{
+  --bg:#d4f7dc;
+  --bg-2:#b8f0c7;
+  --fg:#111827; /* لون النصوص الأساسي */
+  --muted:#5b6b7b;
+  --primary:#22c55e;
+  --primary-2:#16a34a;
+  --accent:#4ade80;
+  --card:rgba(255,255,255,.8);
+  --glass:rgba(255,255,255,.85);
+  --border:rgba(0,0,0,.1);
+  --shadow: 0 8px 20px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+body{
+  margin:0; font-family:ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial; color:var(--fg);
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh;
+  background: linear-gradient(180deg, var(--bg), var(--bg-2));
+}
+
+.card{
+  width:min(400px,90vw); border-radius:12px; padding:32px 28px;
+  background: linear-gradient(180deg, var(--glass), var(--card));
+  box-shadow: var(--shadow); backdrop-filter: blur(12px) saturate(120%);
+  display:flex; flex-direction:column; gap:20px; align-items:center;
+  border:1px solid var(--border);
+}
+
+.header{ text-align:center; }
+.header .badge{
+  display:inline-block; padding:6px 12px; border-radius:999px; font-size:12px;
+  background: rgba(34,197,94,.2); color:var(--fg); font-weight:600; margin-bottom:16px;
+}
+.header h1{ font-size:28px; margin:8px 0 4px; letter-spacing:.4px; }
+.header p.sub{ color:var(--muted); font-size:14px; margin:0; }
+
+.av{
+  width:90px; height:90px; border-radius:50%; margin:0 auto 16px;
+  background: radial-gradient(circle at 30% 30%, #9ae6b4, #22c55e);
+  display:grid; place-items:center; box-shadow: 0 3px 10px rgba(34,197,94,0.25), 0 10px 20px rgba(0,0,0,.15);
+  position:relative; overflow:hidden;
+}
+.av::after{
+  content:""; position:absolute; inset:-6px; border-radius:50%;
+  background: conic-gradient(from 0deg, #22c55e, #86efac, #22c55e);
+  mask: radial-gradient(circle at 50% 50%, transparent 60px, black 60px);
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 60px, black 60px);
+  animation: spin 20s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg) } }
+
+.form{ display:flex; flex-direction:column; gap:14px; width:100%; }
+
+.row{ display:flex; justify-content:space-between; align-items:center; font-size:14px; width:100%; }
+.row a.link{ color:var(--accent); font-weight:600; text-decoration:none; }
+.row a.link:hover{ text-decoration:underline; }
+
+.btn{
+  width:100%; padding:14px; border:none; border-radius:12px; font-weight:700; letter-spacing:.3px;
+  background: linear-gradient(180deg, #4ade80, #22c55e);
+  color: var(--fg);
+  cursor:pointer; box-shadow: 0 4px 12px rgba(34,197,94,.25);
+  transition: all .2s ease;
+}
+.btn:hover{
+  background: linear-gradient(180deg, #86efac, #22c55e);
+}
+
+ a {
+  text-decoration: none;
+  color: inherit; /* عشان ياخد نفس لون النص */
+}
+
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="header">
+    <span class="badge"></span>
+    <h1>WARNNING</h1>
+    <p class="sub">your link is expierd !! please go and ask for a link again</p>
+  </div>
+  <a href="{% url "reset_password" %}">  <button class="btn" type="submit">back to Reset</button></a>
+    
+    
+  </form>
+</div>
+</body>
+</html>
