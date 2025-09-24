@@ -6,14 +6,31 @@ from django.utils import timezone
 def default_expire():
     return timezone.now() + timedelta(minutes=2)
 
+class Roles(models.Model):
+    role = models.CharField(max_length=15 , unique=True)
+    can_add_users = models.BooleanField(default=False)
+    can_create_orders = models.BooleanField(default=False)
+    can_deliver_orders = models.BooleanField(default=False)
+    home_href = models.CharField(max_length=20 , default="home")
+    def __str__(self):
+        return f"Role is {self.role}"
+    
+
+    class Meta:
+        db_table = ''
+        managed = True
+        verbose_name = 'Roles'
+        verbose_name_plural = 'Roles'
+
 class accounts(models.Model):
     username = models.CharField(max_length=50 , unique=True)
     email =  models.EmailField(max_length=40,unique=True)
     password = models.CharField(max_length=25)
-    is_admin = models.BooleanField(default=False)
+    role = models.ForeignKey("Roles", on_delete=models.CASCADE , null=False , default=0)
+    phone_num = models.IntegerField(default=000)
 
     def __str__(self):
-        return f"username is {self.username} password is {self.password} email is {self.email} is_admin {self.is_admin}"
+        return f"username is {self.username} password is {self.password} email is {self.email} "
 
     class Meta:
         db_table = ''

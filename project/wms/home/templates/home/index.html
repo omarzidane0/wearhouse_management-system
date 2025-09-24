@@ -1,0 +1,352 @@
+{% extends 'base/index.html' %}
+
+{% block style %}
+/* حاويات الصفحة */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.container h2 {
+    text-align: right;
+    margin-bottom: 25px;
+    font-size: 26px;
+    color: #28a745;
+}
+
+/* Search + Filter */
+.search-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+    background: #fff;
+    padding: 25px 20px;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    direction: rtl;
+    text-align: right;
+    max-width: 700px; /* تثبيت عرض الكونتينر */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.search-box {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    max-width: 600px; /* أقصى حجم للحقل */
+    min-width: 300px; /* أقل حجم للحقل */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #ddd; /* إطار أوضح */
+    background: #fff;
+}
+
+.search-box input[type="text"] {
+    flex: 1;
+    padding: 14px 16px;
+    border: none;
+    font-size: 15px;
+    height: 20px;
+    text-align: right;
+    width: 100%;
+    min-width: 0;
+    background: transparent;
+}
+
+.search-box input[type="text"]:focus {
+    outline: none;
+}
+
+.search-box button {
+    background: #28a745;
+    border: none;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s;
+    flex-shrink: 0;
+    width: 60px; /* ثابت */
+   
+}
+
+.search-box button:hover {
+    background: #218838;
+}
+
+.search-box button svg {
+    width: 22px;
+    height: 22px;
+    fill: #fff;
+}
+
+/* Filter Toggle */
+.filter-toggle {
+    background: #28a745;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.3s;
+    flex-shrink: 0;
+}
+
+.filter-toggle:hover {
+    background: #218838;
+}
+
+.filter-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+    transition: transform 0.3s ease;
+}
+
+/* Filters Section */
+.filters {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 0;
+    direction: rtl;
+    text-align: right;
+}
+
+.filters.active {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 20px;
+}
+
+.filter-group {
+    background: #f9fff9;
+    border: 1px solid #d4edda;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.filter-group h4 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    color: #28a745;
+    font-weight: bold;
+}
+
+.range-inputs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.range-inputs input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+/* Products Grid */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+    width: 100%;
+    max-width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.product-card h3 {
+    margin: 0 0 8px;
+    color: #28a745;
+    font-size: 18px;
+}
+
+.product-info {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.price {
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-row {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+    .search-box {
+        flex: 1;
+        min-width: 0;
+        max-width: 100%; /* يمدد بالموبايل */
+    }
+    .search-box input[type="text"] {
+        flex: 1;
+        width: 100%;
+    }
+    .filter-toggle {
+        margin-top: 0;
+    }
+    .range-inputs {
+        flex-wrap: wrap;
+    }
+}
+
+{% endblock style %}
+
+ {% block Content %}
+<div class="container">
+  <h2>👟 مستودع الأحذية</h2>
+
+  <!-- Search + Filter -->
+  <div class="search-filter">
+    <div class="search-row">
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="ابحث عن حذاء...">
+        <button id="searchButton">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2a8 8 0 105.293 14.293l5.707 5.707 1.414-1.414-5.707-5.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/></svg>
+        </button>
+      </div>
+      <button class="filter-toggle" id="filterToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"/></svg>
+      </button>
+    </div>
+
+    <div class="filters" id="filters">
+      <div class="filter-group">
+        <h4>الشركات</h4>
+        <div class="filter-options">
+          <label><input type="checkbox" value="Nike"> Nike</label>
+          <label><input type="checkbox" value="Adidas"> Adidas</label>
+          <label><input type="checkbox" value="Puma"> Puma</label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>المقاسات</h4>
+        <div class="range-inputs">
+          <input type="number" placeholder="من">
+          <input type="number" placeholder="إلى">
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>السعر</h4>
+        <div class="range-inputs">
+          <input type="number" placeholder="من">
+          <input type="number" placeholder="إلى">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="products">
+    <div class="product-card">
+      <img src="https://via.placeholder.com/250?text=Nike+Air+Max" alt="Nike Air Max">
+      <h3>Nike Air Max</h3>
+      <div class="product-info">النوع: رياضي</div>
+      <div class="product-info">اللون: أسود</div>
+      <div class="product-info">الشركة: Nike</div>
+      <div class="product-info">الكمية: 50</div>
+      <div class="product-info price">السعر: 120$</div>
+    </div>
+
+    <div class="product-card">
+      <img src="https://via.placeholder.com/250?text=Adidas+Ultraboost" alt="Adidas Ultraboost">
+      <h3>Adidas Ultraboost</h3>
+      <div class="product-info">النوع: جري</div>
+      <div class="product-info">اللون: أبيض</div>
+      <div class="product-info">الشركة: Adidas</div>
+      <div class="product-info">الكمية: 30</div>
+      <div class="product-info price">السعر: 140$</div>
+    </div>
+
+    <div class="product-card">
+      <img src="https://via.placeholder.com/250?text=Puma+Suede" alt="Puma Suede">
+      <h3>Puma Suede</h3>
+      <div class="product-info">النوع: كاجوال</div>
+      <div class="product-info">اللون: أزرق</div>
+      <div class="product-info">الشركة: Puma</div>
+      <div class="product-info">الكمية: 20</div>
+      <div class="product-info price">السعر: 100$</div>
+    </div>
+  </div>
+</div>
+{% endblock Content %}
+{% block scripts %}
+<script>
+  document.getElementById('searchButton').addEventListener('click', function() {
+    const query = document.getElementById('searchInput').value;
+    alert('تنفيذ البحث عن: ' + query);
+  });
+
+  const filterToggle = document.getElementById('filterToggle');
+  const filters = document.getElementById('filters');
+  const arrowSvg = filterToggle.querySelector('svg');
+
+  filterToggle.addEventListener('click', function() {
+    filters.classList.toggle('active');
+    if(filters.classList.contains('active')){
+      arrowSvg.innerHTML = '<path d="M7 14l5-5 5 5H7z"/>'; // Up arrow
+    } else {
+      arrowSvg.innerHTML = '<path d="M7 10l5 5 5-5H7z"/>'; // Down arrow
+    }
+  });
+</script>
+{% endblock scripts %}
+
+

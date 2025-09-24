@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Responsive Sidebar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      direction: ltr;
+    }
+
+    .sidebar {
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(180deg, #28a745 0%, #218838 100%);
+      color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: fixed;
+      left: 0;
+      top: 0;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+      text-align: left;
+      z-index: 1000;
+      transform: translateX(-260px); /* افتراضياً مخفي على الموبايل */
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar h2 {
+      margin: 0 0 25px;
+      font-size: 22px;
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+      padding-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .menu a {
+      display: flex;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: all 0.3s ease;
+      font-size: 15px;
+    }
+
+    .menu a:hover {
+      background: #fff;
+      color: #28a745;
+      transform: translateX(6px);
+      font-weight: bold;
+    }
+
+    .user-info {
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .user-header {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      margin-right: 12px;
+      margin-bottom: 5px;
+      background: #fff;
+    }
+
+    .user-details h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    .user-details p {
+      margin: 0;
+      font-size: 12px;
+      opacity: 0.9;
+      line-height: 1.2;
+    }
+    #logoutform{
+        width:100%;
+    }
+    .logout-btn {
+      background: #fff;
+      color: #28a745;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      padding: 8px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .logout-btn:hover {
+      background: #f0f0f0;
+      transform: scale(1.05);
+    }
+
+    .content {
+      flex: 1;
+      margin-left: 0;
+      padding: 20px;
+      background: #fff;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+      text-align:right;
+    }
+
+    .toggle-btn {
+      display: block;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      font-size: 22px;
+      border-radius: 5px;
+      padding: 8px 12px;
+      cursor: pointer;
+      z-index: 1100;
+      transition: opacity 0.3s ease;
+    }
+
+    .toggle-btn.hidden {
+      display: none;
+    }
+
+    /* على الشاشات الكبيرة يكون السايد بار ظاهر */
+    @media (min-width: 2000px) {
+      .sidebar {
+        transform: translateX(0);
+      }
+      .content {
+        margin-left: 260px;
+        padding: 40px;
+      }
+      .toggle-btn {
+        display: none;
+      }
+    }
+    {% block style %}
+    {% endblock style %}
+  </style>
+</head>
+<body>
+  <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar" id="sidebar">
+    <div class="menu">
+      <h2>Menu</h2>
+
+      {% if data.role.can_create_orders == True%}
+      <a href="{% url 'home'%}">🏠 Home</a>
+      <a href="#">📦 Orders</a>
+      {% endif%}
+      {% if data.role.can_add_users == True%}
+      <a href="{% url 'add_users'%}">➕ Add User</a>
+      {% endif%}
+      {% if data.role.can_deliver_orders == True%}
+      <a href="{% url 'driver_home' %}">🏠 dashboard</a>
+      <a href="#">🏍️ Orders</a>
+      {% endif%}
+      <a href="{% url 'settings' %}">⚙️ Settings</a>
+    </div>
+    <div class="user-info">
+      <div class="user-header">
+        <div class="user-avatar"></div>
+        <div class="user-details">
+          <h3>{{data.username}}</h3>
+          {% if data.role.id == 3 %}
+          <p>👑 Admin</p>
+          {% else %}
+          <p>{{data.role.role}}</p>
+          {% endif %}
+        </div>
+      </div>
+      
+      <form id="logoutform"action="{% url "logout" %}" method="POST">
+     {% csrf_token %}
+      <button type="submit" class="logout-btn">Logout</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="content">
+      {% block Content %}
+    {% endblock Content %}
+  </div>
+{% block scripts%}
+{% endblock scripts%}
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('toggleBtn');
+  const content = document.querySelector('.content');
+
+  function toggleSidebar() {
+    sidebar.classList.toggle('open');
+
+    if (sidebar.classList.contains('open')) {
+      toggleBtn.classList.add('hidden'); // يخفي الزر لما يفتح
+    } else {
+      toggleBtn.classList.remove('hidden'); // يرجع يظهره لما يتسكر
+    }
+  }
+
+  // إغلاق السايدبار عند الضغط خارجها على الشاشات الصغيرة فقط
+  content.addEventListener('click', function() {
+    if (window.innerWidth < 2000 && sidebar.classList.contains('open')) {
+      sidebar.classList.remove('open');
+      toggleBtn.classList.remove('hidden');
+    }
+  });
+
+  // إعادة تحجيم الشاشة
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 2000) {
+      sidebar.classList.remove('open'); // لضمان أنه يظل ظاهر على الكبير
+      toggleBtn.classList.add('hidden');
+    } else {
+      toggleBtn.classList.remove('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>

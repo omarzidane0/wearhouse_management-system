@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-g*r*fk44twer$%3+zlf5&d_2cvgwu2&$h!@yh_pa^hjkg9)it-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.100.30']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'home',
 ]
 
 MIDDLEWARE = [
@@ -99,6 +100,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',   # الأفضل
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',   # fallback
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.ScryptPasswordHasher',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

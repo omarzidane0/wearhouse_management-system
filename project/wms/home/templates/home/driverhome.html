@@ -1,0 +1,133 @@
+{% extends 'base/index.html'%}
+   {% block style%}
+        /* Scoped CSS */
+        .driver-dashboard-page {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+        }
+
+        .driver-dashboard-page h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #155724;
+        }
+
+        /* Stat Card */
+        .driver-dashboard-page .stats {
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .driver-dashboard-page .stat-card {
+            flex: 1;
+            background-color: #28a745;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .driver-dashboard-page .stat-card h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .driver-dashboard-page .stat-card p {
+            font-size: 18px;
+        }
+
+        /* Tables */
+        .driver-dashboard-page h2.table-title {
+            margin-bottom: 15px;
+            color: #155724;
+        }
+
+        .driver-dashboard-page table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .driver-dashboard-page th, 
+        .driver-dashboard-page td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        .driver-dashboard-page th {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .driver-dashboard-page tr.pending {
+            background-color: #d4edda;
+        }
+
+        .driver-dashboard-page tr.delivered {
+            background-color: #c3e6cb;
+        }
+
+        .driver-dashboard-page tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+        {% endblock style%}
+
+{% block Content%}
+    <div class="driver-dashboard-page">
+        <h1>Driver Dashboard 🛵</h1>
+
+        <!-- Stat Card -->
+        <div class="stats">
+            <div class="stat-card">
+                <h2>Total Delivered Orders</h2>
+                <p>5</p>
+            </div>
+        </div>
+
+        <!-- Pending Orders Table -->
+        <h2 class="table-title">Pending Orders</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="pending">
+                    <td>Omar Zeidan</td>
+                    <td>123 Street, Amman</td>
+                    <td>2025-09-24 10:00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Delivered Orders Table -->
+        <h2 class="table-title">Delivered Orders</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Delivered At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="delivered">
+                    <td>Sarah Ahmad</td>
+                    <td>456 Street, Amman</td>
+                    <td>2025-09-23 15:30</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock Content%}

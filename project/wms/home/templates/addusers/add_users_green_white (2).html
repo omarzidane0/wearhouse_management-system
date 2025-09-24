@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إضافة مستخدم - Warehouse</title>
+<style>
+  /* CSS خاص بصفحة Add Users فقط لتجنب التعارض مع base.html */
+  body.add-user-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #fff;
+    color: #333;
+    margin: 0;
+  }
+
+  .add-user-page .container {
+    max-width: 720px;
+    width: 100%;
+    margin: 40px auto;
+    background: #fff;
+    padding: 60px 50px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(33,40,34,0.06);
+    box-sizing: border-box;
+  }
+
+  .add-user-page h1 {
+    color: #28a745;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 50px;
+  }
+
+  .add-user-page form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* زيادة الفراغ بين الحقول لمنع التداخل */
+  }
+
+  .add-user-page label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .add-user-page input,
+  .add-user-page select {
+    width: 100%;
+    padding: 16px 18px;
+    border-radius: 10px;
+    border: 1px solid #e6ece4;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(4,22,12,0.04);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .add-user-page input:focus,
+  .add-user-page select:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 6px rgba(40,167,69,0.3);
+  }
+
+  .add-user-page .full {
+    width: 100%;
+  }
+
+  .add-user-page .actions {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .add-user-page .btn {
+    padding: 16px 28px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #fff;
+    background-color: #28a745;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .add-user-page .btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+  }
+
+  /* منع الكارد من التوسع بشكل كبير */
+  @media (min-width: 800px) {
+    .add-user-page .container {
+      max-width: 720px;
+      padding: 60px 50px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .add-user-page form {
+      gap: 25px;
+    }
+    .add-user-page .container {
+      padding: 40px 20px;
+    }
+  }
+</style>
+</head>
+<body class="add-user-page">
+  <div class="container">
+    <h1>إضافة مستخدم جديد</h1>
+    <form id="addUserForm" action="#" method="post" novalidate>
+      <div>
+        <label for="username">اسم المستخدم</label>
+        <input id="username" name="username" type="text" placeholder="مثال: omar11" required />
+      </div>
+      <div>
+        <label for="email">البريد الإلكتروني</label>
+        <input id="email" name="email" type="email" placeholder="example@mail.com" required />
+      </div>
+      <div>
+        <label for="password">كلمة المرور</label>
+        <input id="password" name="password" type="password" placeholder="********" required />
+      </div>
+      <div>
+        <label for="phone">رقم الهاتف</label>
+        <input id="phone" name="phone" type="tel" placeholder="+962 79 123 4567" />
+      </div>
+      <div class="full">
+        <label for="role_select">اختر الرول</label>
+        <select id="role_select" name="role" required>
+          <option value="" disabled selected>اختر الرول</option>
+          <option value="user">User</option>
+          <option value="manager">Manager</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="full actions">
+        <button type="submit" class="btn">حفظ المستخدم</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
