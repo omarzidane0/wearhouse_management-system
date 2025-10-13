@@ -17,8 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 from accounts import urls
+from django.conf.urls.static import static
+from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("" , include('accounts.urls')),
-    path("" , include('home.urls'))
+    path("" , include('home.urls')),
+    path("inventory/" , include("inventory.urls"))
 ]
+if settings.DEBUG:  # خلي static هنا بس
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

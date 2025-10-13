@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>معاينة: إنشاء Bot</title>
+  <style>
+    /* استخدام namespace مخصص لتجنب التعارض */
+    .bot-form-page body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 10px; direction: rtl; text-align: right; margin:0; }
+    .bot-form-container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); text-align: right; box-sizing: border-box; }
+    .bot-form-container h2 { text-align: center; margin-bottom: 20px; color: #333; font-size: 1.4rem; }
+    .bot-form-container label { display: block; margin-top: 15px; font-weight: 600; color: #555; text-align: right; }
+    .bot-form-container input[type="text"], .bot-form-container input[type="number"], .bot-form-container input[type="file"] {
+      width: 100%; padding: 10px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; transition: 0.3s; text-align: right; box-sizing: border-box;
+    }
+    .bot-form-container input:focus { border-color: #28a745; outline: none; }
+    .bot-form-container button { margin-top: 12px; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; font-size: 0.9rem; }
+    .bot-form-container .add-btn { background: #28a745; color: #fff; }
+    .bot-form-container .add-btn:hover { background: #218838; }
+    .bot-form-container .remove-btn { background: #dc3545; color: #fff; margin-left: 5px; }
+    .bot-form-container .remove-btn:hover { background: #c82333; }
+    .bot-form-container .color-section { border: 1px solid #ddd; padding: 15px; margin-top: 20px; border-radius: 10px; background: #fafafa; display: flex; flex-direction: column; gap:10px; text-align: right; }
+    .bot-form-container .color-section input[name="color[]"] { width: 100%; text-align: right; }
+    .bot-form-container .sizes-container { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; text-align: right; }
+    .bot-form-container .size-section { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; }
+    .bot-form-container .size-section input { flex: 1 1 45%; text-align: right; min-width:120px; }
+    .bot-form-container .preview-area { margin-top: 30px; padding: 15px; background: #fff; border: 1px solid #eee; border-radius: 10px; box-shadow: inset 0 0 5px rgba(0,0,0,0.05); text-align: right; font-size:0.9rem; }
+    .bot-form-container .product-card { display:flex; gap:15px; align-items:center; margin-bottom:10px; padding:5px; background: #f9f9f9; border-radius:6px; justify-content: flex-end; flex-wrap:wrap; }
+    .bot-form-container .product-card img{ width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid #ddd; }
+    @media (max-width: 600px) {
+      .bot-form-container { padding: 15px; }
+      .bot-form-container h2 { font-size: 1.2rem; }
+      .bot-form-container button { width: 100%; }
+      .bot-form-container .size-section input { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body class="bot-form-page">
+  <div class="bot-form-container">
+    <h2>إنشاء Bot — معاينة مباشرة</h2>
+
+    <form id="bot-form">
+      <label>اسم البوت</label>
+      <input type="text" name="bot_name" required>
+
+      <label>نوع البوت</label>
+      <input type="text" name="bot_type" required>
+
+      <label>الشركة</label>
+      <input type="text" name="company" required>
+
+      <label>صورة البوت</label>
+      <input type="file" name="image" accept="image/*" required>
+
+      <div id="colors-container"></div>
+
+      <button type="button" id="add-color-btn" class="add-btn">إضافة اللون الأول</button>
+      <br>
+      <button type="submit" class="add-btn">حفظ البوت</button>
+    </form>
+
+    <div class="preview-area">
+      <h3>Preview (البيانات الحالية)</h3>
+      <div id="preview-output">لا توجد بيانات بعد.</div>
+    </div>
+  </div>
+
+  <script>
+    const colorsContainer = document.getElementById('colors-container');
+    const addColorBtn = document.getElementById('add-color-btn');
+    const previewOutput = document.getElementById('preview-output');
+    const botForm = document.getElementById('bot-form');
+
+    function refreshPreview() {
+      const botData = {
+        name: botForm.bot_name.value || '',
+        type: botForm.bot_type.value || '',
+        company: botForm.company.value || '',
+        imageName: botForm.image.files[0]?.name || '',
+        colors: []
+      };
+console.log("bot name is " + botData.name)
+      colorsContainer.querySelectorAll('.color-section').forEach(cs => {
+        const colorName = cs.querySelector('input[name="color[]"]').value || '';
+        const sizes = [];
+        cs.querySelectorAll('.size-section').forEach(sz => {
+          sizes.push({
+            size: sz.querySelector('input[name="size[]"]').value || '',
+            quantity: sz.querySelector('input[name="quantity[]"]').value || ''
+          });
+        });
+        botData.colors.push({ color: colorName, sizes });
+      });
+      console.log(botData.colors)
+      console.log(botData.colors.length)
+      if (!botData.name || botData.colors.length === 0) {
+        console.log("there is no name or colors")
+        previewOutput.innerHTML = 'لا توجد بيانات بعد.';
+        return;
+      }
+
+      let html = `<div style="font-weight:bold; margin-bottom:8px; color:#444">${botData.name} — ${botData.type} — ${botData.company}</div>`;
+      if (botData.imageName) html += `<div style="margin-bottom:8px">صورة: ${botData.imageName}</div>`;
+
+      botData.colors.forEach(c => {
+        html += `<div style="margin-bottom:6px; color:#555"><strong>لون:</strong> ${c.color}</div>`;
+        c.sizes.forEach(s => {
+          html += `<div class="product-card"> <img src="https://via.placeholder.com/60?text=${encodeURIComponent(c.color)}" alt="img"> <div>حجم: ${s.size} — كمية: ${s.quantity}</div></div>`;
+        });
+      });
+
+      previewOutput.innerHTML = html;
+      return botData
+    }
+
+    function createColorSection(buttonText = 'إضافة حجم') {
+      const colorDiv = document.createElement('div');
+      colorDiv.className = 'color-section';
+
+      const colorInput = document.createElement('input');
+      colorInput.type = 'text';
+      colorInput.name = 'color[]';
+      colorInput.placeholder = 'اللون';
+      colorInput.required = true;
+
+      const addSizeBtn = document.createElement('button');
+      addSizeBtn.type = 'button';
+      addSizeBtn.className = 'add-btn';
+      addSizeBtn.textContent = buttonText;
+
+      const removeColorBtn = document.createElement('button');
+      removeColorBtn.type = 'button';
+      removeColorBtn.className = 'remove-btn';
+      removeColorBtn.textContent = 'حذف اللون';
+
+      const sizesContainer = document.createElement('div');
+      sizesContainer.className = 'sizes-container';
+
+      colorDiv.appendChild(colorInput);
+      colorDiv.appendChild(addSizeBtn);
+      colorDiv.appendChild(sizesContainer);
+      colorDiv.appendChild(removeColorBtn);
+
+      addSizeBtn.addEventListener('click', () => {
+        const sizeDiv = document.createElement('div');
+        sizeDiv.className = 'size-section';
+        const sizeInput = document.createElement('input');
+        sizeInput.type = 'text';
+        sizeInput.name = 'size[]';
+        sizeInput.placeholder = 'الحجم';
+        sizeInput.required = true;
+
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.name = 'quantity[]';
+        quantityInput.placeholder = 'الكمية';
+        quantityInput.required = true;
+
+        const removeSizeBtn = document.createElement('button');
+        removeSizeBtn.type = 'button';
+        removeSizeBtn.className = 'remove-btn';
+        removeSizeBtn.textContent = 'حذف الحجم';
+
+        removeSizeBtn.addEventListener('click', () => { sizeDiv.remove(); refreshPreview(); });
+        sizeInput.addEventListener('input', refreshPreview);
+        quantityInput.addEventListener('input', refreshPreview);
+
+        sizeDiv.appendChild(sizeInput);
+        sizeDiv.appendChild(quantityInput);
+        sizeDiv.appendChild(removeSizeBtn);
+        sizesContainer.appendChild(sizeDiv);
+        refreshPreview();
+      });
+
+      colorInput.addEventListener('input', refreshPreview);
+      removeColorBtn.addEventListener('click', () => { colorDiv.remove(); refreshPreview(); });
+
+      colorsContainer.appendChild(colorDiv);
+      refreshPreview();
+    }
+
+    addColorBtn.addEventListener('click', () => createColorSection('إضافة حجم'));
+
+
+    botForm.addEventListener('submit', (e) => { e.preventDefault();
+    
+    const result = refreshPreview();
+    console.log("testing")
+    console.log(result)
+     alert('تم حفظ البوت بنجاح!'); });
+  </script>
+</body>
+</html>

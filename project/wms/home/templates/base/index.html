@@ -182,12 +182,20 @@
       <a href="#">📦 Orders</a>
       {% endif%}
       {% if data.role.can_add_users == True%}
-      <a href="{% url 'add_users'%}">➕ Add User</a>
+      <a href="{% url 'add_users'%}">➕👤 Add User</a>
       {% endif%}
       {% if data.role.can_deliver_orders == True%}
       <a href="{% url 'driver_home' %}">🏠 dashboard</a>
       <a href="#">🏍️ Orders</a>
       {% endif%}
+      {% if data.role.can_add_products == True%}
+      <a href={% url 'a_product'%}>➕📦 add products</a>
+      <a href="{% url 'categorys'%}">📂 Category</a>
+      <a href="{% url 'update'%}">📝 Edit products</a>
+      <a href="{% url 'companys'%}">🏬 Company</a>
+
+      <a href="{% url 'colors'%}">🖌️ Colors</a>
+      {% endif %}
       <a href="{% url 'settings' %}">⚙️ Settings</a>
     </div>
     <div class="user-info">

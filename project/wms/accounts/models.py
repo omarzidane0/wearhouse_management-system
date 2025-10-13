@@ -11,6 +11,7 @@ class Roles(models.Model):
     can_add_users = models.BooleanField(default=False)
     can_create_orders = models.BooleanField(default=False)
     can_deliver_orders = models.BooleanField(default=False)
+    can_add_products = models.BooleanField(default=False)
     home_href = models.CharField(max_length=20 , default="home")
     def __str__(self):
         return f"Role is {self.role}"
@@ -44,8 +45,7 @@ class password_token(models.Model):
     token = models.CharField(max_length=80)
     expire_date = models.DateTimeField(default=default_expire)
 
-    def __str__(self):
-        pass
+
 
     class Meta:
         db_table = ''

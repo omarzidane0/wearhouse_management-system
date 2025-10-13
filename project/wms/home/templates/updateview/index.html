@@ -1,0 +1,79 @@
+{% extends 'base/index.html'%}
+{% load static%}
+{% block style %}
+    :root{
+      --brand-green: #2fa85a;
+      --brand-green-dark: #238746;
+      --muted: #6b7280;
+      --bg: #f7faf7;
+      --card: #ffffff;
+      --radius: 10px;
+      --shadow: 0 6px 18px rgba(15,23,42,0.06);
+    }
+    .product-table-container *{box-sizing:border-box} /* Scoped to prevent affecting global CSS */
+    .product-table-container{
+      font-family: system-ui, "Segoe UI", Roboto, "Noto Sans Arabic", "Tajawal", Arial, sans-serif;
+      padding: 20px;
+      background: var(--bg);
+      color: #0f172a;
+    }
+    .product-table-container h1{text-align:right; color: var(--brand-green-dark);}
+    .product-table-card{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      overflow-x:auto;
+    }
+    table{width:100%; border-collapse:collapse;}
+    th, td{padding:12px; border-bottom:1px solid #e5e7eb; text-align:right;}
+    th{color:var(--muted); font-weight:600;}
+    button{
+      background: var(--brand-green);
+      color:white;
+      border:none;
+      border-radius:8px;
+      padding:8px 12px;
+      cursor:pointer;
+      font-size:14px;
+    }
+    button:hover{background:var(--brand-green-dark);}
+
+    /* Responsive */
+    @media (max-width:640px){
+      .product-table-card table, .product-table-card thead, .product-table-card tbody, .product-table-card th, .product-table-card td, .product-table-card tr {
+        display:block;
+      }
+      .product-table-card thead tr { display:none; }
+      .product-table-card tr { margin-bottom:12px; border-bottom:1px solid #e5e7eb; padding-bottom:12px; }
+      .product-table-card td { text-align:right; padding:8px 0; border:none; display:flex; justify-content:space-between; }
+      .product-table-card td::before { content: attr(data-label); font-weight:600; color:var(--muted); }
+    }
+{% endblock style%}
+{% block Content%}
+  <div class="product-table-container">
+    <h1>قائمة المنتجات</h1>
+    <div class="product-table-card">
+      <table>
+        <thead>
+          <tr><th>اسم المنتج</th><th>تعديل</th></tr>
+        </thead>
+        <tbody id="productsBody">
+        
+        {% for p in data.extra %}
+        <tr>
+        <td data-label="اسم المنتج">{{p.name}}</td>
+          <td data-label="تعديل"><a href='{% url 'update_p' p.id%}'><button onclick="editProduct">✏️ تعديل</button></a></td>    
+          </tr>
+        {% endfor %}
+        
+        </tbody>
+       
+      </table>
+    </div>
+  </div>
+{% endblock Content%}
+{% block scripts%}
+
+
+{% endblock scripts%}

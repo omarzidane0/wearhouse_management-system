@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>صفحة الأدمن - المنتجات</title>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+    .container { background: #fff; padding: 20px; border-radius: 10px; }
+    h2 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #eee; }
+    button { padding: 6px 12px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    button.add { background: #4caf50; color: white; }
+    button.show { background: #2196f3; color: white; }
+    input { padding: 5px; width: 90%; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>إدارة المنتجات</h2>
+
+    <table>
+      <tr>
+        <th>اسم المنتج</th>
+        <th>التصنيف</th>
+        <th>الشركة</th>
+        <th>خيارات</th>
+      </tr>
+      <tr>
+        <td><input type="text" id="productName" value="حذاء رياضي"></td>
+        <td><input type="text" id="productCategory" value="أحذية"></td>
+        <td><input type="text" id="productCompany" value="Nike"></td>
+        <td><button class="add" onclick="saveProduct()">💾 حفظ</button></td>
+      </tr>
+    </table>
+
+    <button class="show" onclick="toggleColors()">عرض الألوان</button>
+
+    <div id="colorsSection" style="display:none; margin-top:20px;">
+      <table id="colorsTable">
+        <thead>
+          <tr>
+            <th>اللون</th>
+            <th>خيارات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="text" value="أسود"></td>
+            <td>
+              <button class="show" onclick="toggleSizes(this)">عرض المقاسات</button>
+              <button class="add" onclick="saveColor(this)">💾 حفظ</button>
+            </td>
+          </tr>
+          <tr class="sizesRow" style="display:none;">
+            <td colspan="2">
+              <table class="sizesTable">
+                <thead>
+                  <tr><th>المقاس</th><th>الكمية</th><th>خيارات</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><input type="text" value="40"></td><td><input type="number" value="10"></td><td><button class='add' onclick='saveSize(this)'>💾 حفظ</button></td></tr>
+                  <tr><td><input type="text" value="41"></td><td><input type="number" value="5"></td><td><button class='add' onclick='saveSize(this)'>💾 حفظ</button></td></tr>
+                </tbody>
+              </table>
+              <button class="add" onclick="addSize(this)">➕ إضافة مقاس</button>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="text" value="أبيض"></td>
+            <td>
+              <button class="show" onclick="toggleSizes(this)">عرض المقاسات</button>
+              <button class="add" onclick="saveColor(this)">💾 حفظ</button>
+            </td>
+          </tr>
+          <tr class="sizesRow" style="display:none;">
+            <td colspan="2">
+              <table class="sizesTable">
+                <thead>
+                  <tr><th>المقاس</th><th>الكمية</th><th>خيارات</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><input type="text" value="39"></td><td><input type="number" value="7"></td><td><button class='add' onclick='saveSize(this)'>💾 حفظ</button></td></tr>
+                </tbody>
+              </table>
+              <button class="add" onclick="addSize(this)">➕ إضافة مقاس</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="add" onclick="addColor()">➕ إضافة لون</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleColors() {
+      const section = document.getElementById('colorsSection');
+      section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleSizes(btn) {
+      const row = btn.parentElement.parentElement.nextElementSibling;
+      if (row && row.classList.contains('sizesRow')) {
+        row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+      }
+    }
+
+    function addColor() {
+      const table = document.querySelector('#colorsTable tbody');
+      const newColor = document.createElement('tr');
+      newColor.innerHTML = `<td><input type='text' value='لون جديد'></td><td><button class='show' onclick='toggleSizes(this)'>عرض المقاسات</button> <button class='add' onclick='saveColor(this)'>💾 حفظ</button></td>`;
+      const newSizes = document.createElement('tr');
+      newSizes.classList.add('sizesRow');
+      newSizes.style.display = 'none';
+      newSizes.innerHTML = `<td colspan='2'><table class='sizesTable'><thead><tr><th>المقاس</th><th>الكمية</th><th>خيارات</th></tr></thead><tbody></tbody></table><button class='add' onclick='addSize(this)'>➕ إضافة مقاس</button></td>`;
+      table.appendChild(newColor);
+      table.appendChild(newSizes);
+    }
+
+    function addSize(btn) {
+      const tbody = btn.previousElementSibling.querySelector('tbody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `<td><input type='text' placeholder='مقاس'></td><td><input type='number' value='0'></td><td><button class='add' onclick='saveSize(this)'>💾 حفظ</button></td>`;
+      tbody.appendChild(newRow);
+    }
+
+    function saveProduct() {
+      const name = document.getElementById('productName').value;
+      const category = document.getElementById('productCategory').value;
+      const company = document.getElementById('productCompany').value;
+      console.log('تم حفظ المنتج:', { name, category, company });
+      alert('تم حفظ بيانات المنتج');
+    }
+
+    function saveColor(btn) {
+      const row = btn.parentElement.parentElement;
+      const color = row.querySelector('input[type=text]').value;
+      console.log('تم حفظ اللون:', color);
+      alert('تم حفظ اللون');
+    }
+
+    function saveSize(btn) {
+      const row = btn.parentElement.parentElement;
+      const size = row.querySelector('input[type=text]').value;
+      const qty = row.querySelector('input[type=number]').value;
+      console.log('تم حفظ المقاس:', { size, qty });
+      alert('تم حفظ المقاس');
+    }
+  </script>
+</body>
+</html>

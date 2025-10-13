@@ -1,0 +1,144 @@
+{% extends 'base/index.html'%}
+{% load static %}
+{% block style%}
+    /* منع التعارض عبر مساحة أسماء خاصة */
+    .admin-page * {
+      box-sizing: border-box;
+      direction: rtl;
+    }
+
+    .admin-page {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .admin-page .admin-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .admin-page h2 {
+      text-align: center;
+    }
+
+    .admin-page table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .admin-page th, .admin-page td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .admin-page th {
+      background: #eee;
+    }
+
+    .admin-page button {
+      padding: 6px 12px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .admin-page button.add {
+      background: #4caf50;
+      color: white;
+    }
+
+    .admin-page button.show {
+      background: #2196f3;
+      color: white;
+    }
+
+    .admin-page select, .admin-page input {
+      padding: 5px;
+      width: 90%;
+    }
+              .loading {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255,255,255,0.9);
+      padding: 20px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      font-size: 18px;
+      color: #28a745;
+      z-index: 1000;
+    }
+ {% endblock style%}
+ {% block Content%}
+  <div class="admin-page">
+    <div class="admin-container">
+      <h2>إدارة المنتجات</h2>
+  <div class="loading" id="loading">جاري التحميل...</div>
+      <table>
+        <tr>
+          <th>اسم المنتج</th>
+          <th>التصنيف</th>
+          <th>الشركة</th>
+          <th>خيارات</th>
+        </tr>
+        <tr>
+          <td><input type="text" id="productName" value="حذاء رياضي"></td>
+          <td>
+            <select id="productCategory">
+            </select>
+          </td>
+          <td>
+            <select id="productCompany">
+
+            </select>
+          </td>
+          <td><button class="add" onclick="saveProduct()">💾 حفظ</button></td>
+        </tr>
+      </table>
+
+      <button class="show" onclick="toggleColors()">عرض الألوان</button>
+
+      <div id="colorsSection" style="display:none; margin-top:20px;">
+        <table id="colorsTable">
+          <thead>
+            <tr>
+              <th>اللون</th>
+              <th>خيارات</th>
+            </tr>
+          </thead>
+          <tbody>
+        
+            <tr class="sizesRow" style="display:none;">
+              <td colspan="2">
+                <table class="sizesTable">
+                  <thead>
+                    <tr><th>المقاس</th><th>الكمية</th><th>خيارات</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><input type="text" value="40"></td><td><input type="number" value="10"></td><td><button class='add' onclick='saveSize(this)'>💾 حفظ</button></td></tr>
+                    <tr><td><input type="text" value="41"></td><td><input type="number" value="5"></td><td><button class='add' onclick='saveSize(this)'>💾 حفظ</button></td></tr>
+                  </tbody>
+                </table>
+                <button class="add" onclick="addSize(this)">➕ إضافة مقاس</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="add" onclick="addColor()">➕ إضافة لون</button>
+      </div>
+    </div>
+  </div>
+{% endblock Content%}
+{% block scripts%}
+  <script src="{% static 'js/edit_product.js'%}">
+
+  </script>
+{% endblock scripts%}

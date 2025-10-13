@@ -1,5 +1,5 @@
 {% extends 'base/index.html' %}
-
+{% load static %}
 {% block style %}
 /* حاويات الصفحة */
 .container {
@@ -101,7 +101,7 @@
     cursor: pointer;
     width: 48px;
     height: 48px;
-    display: flex;
+    display: inline;
     align-items: center;
     justify-content: center;
     transition: background 0.3s, transform 0.3s;
@@ -147,7 +147,10 @@
     box-shadow: 0 3px 10px rgba(0,0,0,0.05);
     overflow: hidden;
 }
-
+.filter-group label{
+display:block;
+width:100%;
+}
 .filter-group h4 {
     margin: 0 0 10px;
     font-size: 16px;
@@ -243,14 +246,62 @@
     .range-inputs {
         flex-wrap: wrap;
     }
+
+
 }
+.filters .submit{
+  padding-top:40px;
+  text-align:center;
+  justify-content:center;
+}
+.filters .submit button{
+    background: #28a745;
+  color: white;
+  
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+  justify-content:center;
+  text-align:center;
+}
+    .pagination-con button {
+  background: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+  justify-content:center;
+  text-align:center;
+}
+ .loading {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255,255,255,0.9);
+      padding: 20px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      font-size: 18px;
+      color: #28a745;
+      z-index: 1000;
+    }
 
 {% endblock style %}
 
  {% block Content %}
 <div class="container">
   <h2>👟 مستودع الأحذية</h2>
-
+    <div class="loading" id="loading">جاري التحميل...</div>
   <!-- Search + Filter -->
   <div class="search-filter">
     <div class="search-row">
@@ -260,41 +311,25 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 2a8 8 0 105.293 14.293l5.707 5.707 1.414-1.414-5.707-5.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/></svg>
         </button>
       </div>
+    </div>
+  </div>
       <button class="filter-toggle" id="filterToggle">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"/></svg>
       </button>
-    </div>
-
     <div class="filters" id="filters">
-      <div class="filter-group">
-        <h4>الشركات</h4>
-        <div class="filter-options">
-          <label><input type="checkbox" value="Nike"> Nike</label>
-          <label><input type="checkbox" value="Adidas"> Adidas</label>
-          <label><input type="checkbox" value="Puma"> Puma</label>
-        </div>
-      </div>
 
-      <div class="filter-group">
-        <h4>المقاسات</h4>
-        <div class="range-inputs">
-          <input type="number" placeholder="من">
-          <input type="number" placeholder="إلى">
-        </div>
-      </div>
 
-      <div class="filter-group">
-        <h4>السعر</h4>
-        <div class="range-inputs">
-          <input type="number" placeholder="من">
-          <input type="number" placeholder="إلى">
-        </div>
-      </div>
+          <div class="filter-group submit">
+          
+      <button id="fltr_btn">Filter</button>
     </div>
-  </div>
-
+        </div>
+       
   <!-- Products -->
-  <div class="products">
+  <br></br>
+  
+  <div id="products" class="products">
+  <!--
     <div class="product-card">
       <img src="https://via.placeholder.com/250?text=Nike+Air+Max" alt="Nike Air Max">
       <h3>Nike Air Max</h3>
@@ -304,30 +339,22 @@
       <div class="product-info">الكمية: 50</div>
       <div class="product-info price">السعر: 120$</div>
     </div>
+-->
 
-    <div class="product-card">
-      <img src="https://via.placeholder.com/250?text=Adidas+Ultraboost" alt="Adidas Ultraboost">
-      <h3>Adidas Ultraboost</h3>
-      <div class="product-info">النوع: جري</div>
-      <div class="product-info">اللون: أبيض</div>
-      <div class="product-info">الشركة: Adidas</div>
-      <div class="product-info">الكمية: 30</div>
-      <div class="product-info price">السعر: 140$</div>
-    </div>
 
-    <div class="product-card">
-      <img src="https://via.placeholder.com/250?text=Puma+Suede" alt="Puma Suede">
-      <h3>Puma Suede</h3>
-      <div class="product-info">النوع: كاجوال</div>
-      <div class="product-info">اللون: أزرق</div>
-      <div class="product-info">الشركة: Puma</div>
-      <div class="product-info">الكمية: 20</div>
-      <div class="product-info price">السعر: 100$</div>
-    </div>
-  </div>
+
+
+</div>  
+  <br></br>
+<div class="pagination-con">
+<button id="next">Next</button>
+<span id="page_info">3/15</span>
+<button id="previous">Previous</button>
+</div>
 </div>
 {% endblock Content %}
 {% block scripts %}
+<script src="{% static 'js/home.js'%}"></script>
 <script>
   document.getElementById('searchButton').addEventListener('click', function() {
     const query = document.getElementById('searchInput').value;
@@ -346,6 +373,9 @@
       arrowSvg.innerHTML = '<path d="M7 10l5 5 5-5H7z"/>'; // Down arrow
     }
   });
+
+
+
 </script>
 {% endblock scripts %}
 
