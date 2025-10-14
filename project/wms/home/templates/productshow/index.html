@@ -1,0 +1,313 @@
+{% extends 'base/index.html'%}
+{% load static%}
+{% block style%}
+
+
+    .content {
+      flex: 1;
+      margin-left: 0;
+      padding: 20px;
+      background: #fff;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+      text-align: right;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 15px;
+    }
+
+    .product {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .img-container{
+      width:250px;
+      height:250px;
+    }
+    .product img {
+      width: 100%;
+      height:100%;
+      max-width: 320px;
+      border-radius: 15px;
+    }
+
+    .details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 250px;
+    }
+
+    .content h2 {
+      margin-top: 0;
+      font-size: 1.5em;
+    }
+
+    .info {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .colors {
+      margin-top: 20px;
+    }
+
+    .color {
+      display: inline-block;
+      padding: 6px 12px;
+      background: #eee;
+      border-radius: 10px;
+      margin: 5px;
+      cursor: pointer;
+      border: 2px solid #ddd;
+      font-size: 14px;
+    }
+
+    .color.selected {
+      border-color: #000;
+      background: #d1e0ff;
+    }
+
+    .sizes {
+      margin-top: 15px;
+    }
+
+    .size-item {
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      background: #f1f1f1;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .size-info {
+      flex: 1;
+      margin-bottom: 5px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    .content button {
+      background: linear-gradient(90deg, #28a745, #218838);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+      font-size: 15px;
+      font-weight: 600;
+      height: 38px;
+      width: 100%;
+      max-width: 120px;
+    }
+
+   .content  button:hover {
+      transform: scale(1.03);
+      background: linear-gradient(90deg, #218838, #1e7e34);
+    }
+
+    .quantity {
+      font-size: 14px;
+      color: #666;
+      margin-right: 10px;
+    }
+
+   .content input[type='number'] {
+      height: 38px;
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 15px;
+      width: 100%;
+      max-width: 120px;
+      box-sizing: border-box;
+    }
+
+    .cart {
+      margin-top: 25px;
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .cart-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #ddd;
+      font-size: 15px;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      .details {
+        text-align: center;
+      }
+      .product {
+        flex-direction: column;
+        align-items: center;
+      }
+      .size-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .content button, input[type='number'] {
+        max-width: none;
+        width: 100%;
+      }
+    }
+{% endblock style%}
+
+{% block Content%}
+  <div class="content">
+    <div class="container">
+      <div class="product">
+      <div class='img-container'>
+        <img src="{{data.extra.image.url}}" alt="حذاء">
+        </div>
+        <div class="details">
+          <h2>{{data.extra.name}}</h2>
+          <div class="info">
+            <p><strong>الشركة:</strong> {{data.extra.company}}</p>
+            <p><strong>النوع:</strong> {{data.extra.category}}</p>
+          </div>
+
+          <div class="colors">
+            <strong>الألوان المتوفرة:</strong><br>
+            {% for color in data.extra.colors%}
+                        <span class="color" data-color="{{color.id}}">{{color.name}}</span>
+            {% endfor %}
+          </div>
+
+          <div class="sizes" id="sizesContainer">
+          {% if data.extra.colors|length == 0%}
+              <p>لايوجد اي نوع معروض للبيع الان</p>
+          {% else %}
+            <p>اختر لون لعرض المقاسات...</p>
+            {% for color in data.extra.colors%}
+          
+                        <div class='data-size' data-color="{{color.id}}">
+                          {% for size in color.sizes%}
+                          <div class='size-item'>
+                      <div class="size-info">المقاس: <strong size-id='{{size.id}}'>{{size.size}}</strong> <span class="quantity" >الكمية: {{size.qty}}</span></div>
+            <div class="actions">
+              <input type='number' min='1' max='{{size.qty}}' value='1'size-id='{{size.id}}' > 
+              <button class='submit' size-id='{{size.id}}'>
+              <!--'غير متوفر' : '🛍️ أضف إلى السلة'-->
+            🛍️ أضف إلى السلة
+              </button>
+            </div>
+            </div>
+            {% endfor%}
+                        </div>
+            {% endfor %}
+          {% endif%}
+            </div>
+        </div>
+      </div>
+
+      <div class="cart" id="cart">
+        <h3>🛒 سلة المشتريات</h3>
+        <div id="cartItems">لم تتم إضافة أي منتجات بعد.</div>
+      </div>
+    </div>
+  </div>
+
+{% endblock Content%}
+{% block scripts%}
+  <script>
+  const divs = document.querySelectorAll('div[data-size], div[data-color]');
+divs.forEach(div => {
+    div.style.display = 'none';
+});
+
+  const colors = document.querySelectorAll('.color');
+    const sizesContainer = document.getElementById('sizesContainer');
+    const cartItemsDiv = document.getElementById('cartItems');
+
+    const cart = [];
+   const spans = document.querySelectorAll('span[data-color]');
+
+// نضيف حدث click لكل span
+spans.forEach(span => {
+    span.addEventListener('click', () => {
+        const targetColor = span.getAttribute('data-color'); // ناخد اللون من span
+                spans.forEach(s => s.classList.remove('selected'));
+        span.classList.add('selected');
+        // نجيب كل الديفات اللي عندها data-color
+        const divs = document.querySelectorAll('div[data-color]');
+
+        divs.forEach(div => {
+            if(div.getAttribute('data-color') === targetColor){
+                div.style.display = 'block'; // نظهر الديف اللي لونه نفس targetColor
+            } else {
+                div.style.display = 'none'; // نخفي الباقي
+            }
+        });
+    });
+});
+const buttons = document.querySelectorAll('.submit');
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        console.log(button.getAttribute('size-id'));
+        const qty = document.querySelector(`input[size-id="${button.getAttribute('size-id')}"]`);
+
+        if (qty.value > 0 && qty.value <= parseInt(qty.getAttribute('max'))) {
+            cart.push({ color: document.querySelector('span.selected').innerText ,
+             size: document.querySelector(`strong[size-id="${button.getAttribute('size-id')}"]`).innerText ,
+              quantity: qty.value });
+            updateCart();
+            button.innerText = '✅ تمت الإضافة';
+            setTimeout(() => (button.innerText = '🛍️ أضف إلى السلة'), 2000);
+        }
+    });
+});
+
+    function updateCart() {
+      if (cart.length === 0) {
+        cartItemsDiv.innerHTML = 'لم تتم إضافة أي منتجات بعد.';
+        return;
+      }
+
+      cartItemsDiv.innerHTML = '';
+      cart.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.classList.add('cart-item');
+        div.innerHTML = `${index + 1}. ${item.color} - مقاس ${item.size} × ${item.quantity}`;
+        cartItemsDiv.appendChild(div);
+      });
+    }
+  </script>
+{% endblock scripts%}

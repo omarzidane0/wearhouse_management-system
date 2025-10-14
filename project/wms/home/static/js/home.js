@@ -114,6 +114,9 @@ function get_items(page_num , bool_search){
 }
 
 function createProductCard(product) {
+    const link = document.createElement('a')
+    link.href = `${window.location.origin}/show_product/${product.id}`
+    link.style.textDecoration = 'none';
     const card = document.createElement("div");
     card.className = "product-card";
 
@@ -142,8 +145,8 @@ function createProductCard(product) {
     card.appendChild(companyDiv);
 
 
-
-    product_cont.appendChild(card)
+    link.appendChild(card)
+    product_cont.appendChild(link)
   }
 
 filter_btn.addEventListener("click", ()=>{

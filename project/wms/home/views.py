@@ -1,6 +1,6 @@
 from django.shortcuts import render , redirect
 from accounts.models import accounts
-from inventory.models import Product
+from inventory.models import Product , ProductColor , ProductStock
 from django.contrib import messages
 from accounts.decorators import session_req_v
 # Create your views here.
@@ -121,5 +121,29 @@ def show_product(request,id):
         product = Product.objects.filter(id=id)
         if not product.exists():
             return redirect(user.role.home_href)
+        product = product.first()
+        data = {'name':product.name,
+                'category':product.category.name,
+                'company':product.company.name,
+                'image':product.image_url,
+                'colors':[]
+                }
+        product_c = ProductColor.objects.filter(product=product)
+        if product_c.exists():
+            for pc in product_c:
+                product_stock = ProductStock.objects.filter(color=pc)
+                color = {}
+                color['name'] = pc.color.name
+                color['id'] = pc.id
+                if product_stock.exists():
+                    color['sizes'] = []
+                    for ps in product_stock:
+                        size = {}
+                        size['id'] = ps.id
+                        size['size'] = ps.size
+                        size['qty'] = ps.quantity
+                        color['sizes'].append(size)
+                data['colors'].append(color)
         
-        return render(request , 'productshow/index.html' , context(user))
+        print(data)
+        return render(request , 'productshow/index.html' , context(user ,data))
