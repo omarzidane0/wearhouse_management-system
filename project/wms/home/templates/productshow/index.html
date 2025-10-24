@@ -224,7 +224,7 @@
                       <div class="size-info">المقاس: <strong size-id='{{size.id}}'>{{size.size}}</strong> <span class="quantity" >الكمية: {{size.qty}}</span></div>
             <div class="actions">
               <input type='number' min='1' max='{{size.qty}}' value='1'size-id='{{size.id}}' > 
-              <button class='submit' size-id='{{size.id}}'>
+              <button class='submit' id='submit' size-id='{{size.id}}'>
               <!--'غير متوفر' : '🛍️ أضف إلى السلة'-->
             🛍️ أضف إلى السلة
               </button>
@@ -248,6 +248,22 @@
 {% endblock Content%}
 {% block scripts%}
   <script>
+  // جلب CSRF token من الكوكيز
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
   const divs = document.querySelectorAll('div[data-size], div[data-color]');
 divs.forEach(div => {
     div.style.display = 'none';
@@ -283,18 +299,49 @@ buttons.forEach(button => {
     button.addEventListener('click', () => {
         console.log(button.getAttribute('size-id'));
         const qty = document.querySelector(`input[size-id="${button.getAttribute('size-id')}"]`);
+        
+        submit_item(button.getAttribute('size-id') , qty , button)
+        
+    });
+});
+async function submit_item(id ,qty , button){
+  console.log("qty is"+qty.value)
+  console.log('id is '+ id)
+  let response = await fetch('/cart/add/',{
+    method : 'POST',
+    headers : {
+                  "Content-Type":"Applications/json",
+            "X-CSRFToken":document.getElementsByName("csrfmiddlewaretoken")[0].value, 
+    },
+    body: JSON.stringify({'p_id':id , 'qty':qty.value}),
+  })
+  let data = await response.json()
 
-        if (qty.value > 0 && qty.value <= parseInt(qty.getAttribute('max'))) {
-            cart.push({ color: document.querySelector('span.selected').innerText ,
-             size: document.querySelector(`strong[size-id="${button.getAttribute('size-id')}"]`).innerText ,
+  if (data.status){
+            if (qty.value > 0 && qty.value <= parseInt(qty.getAttribute('max'))) {
+            cart.push({id:id, color: document.querySelector('span.selected').innerText ,
+             size: document.querySelector(`strong[size-id="${id}"]`).innerText ,
               quantity: qty.value });
             updateCart();
             button.innerText = '✅ تمت الإضافة';
             setTimeout(() => (button.innerText = '🛍️ أضف إلى السلة'), 2000);
         }
-    });
-});
-
+  }else{
+    if (data.set_max && data.num_v === 0){
+    alert(data.reason)
+    }
+    else if (data.set_max){
+                  cart.push({id:id, color: document.querySelector('span.selected').innerText ,
+             size: document.querySelector(`strong[size-id="${id}"]`).innerText ,
+              quantity: data.num_v});
+            updateCart();
+            button.innerText = '✅ تمت الإضافة';
+            setTimeout(() => (button.innerText = '🛍️ أضف إلى السلة'), 2000);
+    }
+                alert(data.reason)
+  }
+  console.log(data)
+}
     function updateCart() {
       if (cart.length === 0) {
         cartItemsDiv.innerHTML = 'لم تتم إضافة أي منتجات بعد.';
@@ -309,5 +356,6 @@ buttons.forEach(button => {
         cartItemsDiv.appendChild(div);
       });
     }
+    
   </script>
 {% endblock scripts%}

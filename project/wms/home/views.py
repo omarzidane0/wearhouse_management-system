@@ -2,6 +2,7 @@ from django.shortcuts import render , redirect
 from accounts.models import accounts
 from inventory.models import Product , ProductColor , ProductStock
 from django.contrib import messages
+from cart.models import Cart , CartItem
 from accounts.decorators import session_req_v
 # Create your views here.
 def context(user , extra=None):
@@ -147,3 +148,18 @@ def show_product(request,id):
         
         print(data)
         return render(request , 'productshow/index.html' , context(user ,data))
+    
+@session_req_v
+def show_cart(request):
+    user = request.user_obj
+    if user.role.can_create_orders:
+        cart = Cart.objects.filter(user=user)
+        data = {'items':[]}
+        if cart.exists():
+            cart = cart.first()
+            cart_items = CartItem.objects.filter(cart=cart)
+            if cart_items.exists():
+                data['items'] = list(cart_items)
+        return render(request , 'cart/index.html' , context(user , data))
+    else:
+        return redirect(user.role.home_href)

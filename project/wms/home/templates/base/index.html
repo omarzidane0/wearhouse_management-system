@@ -45,7 +45,36 @@
       padding-bottom: 10px;
       letter-spacing: 1px;
     }
+    .menu{
+      height:100%;
+      width:100%;
+        overflow-y: auto; /* سكرول عمودي */
+  overflow-x: hidden; /* إخفاء السكرول الأفقي */
+    padding-right: 10px; /* يبعد النص عن السكرول */
+  box-sizing: border-box; 
+    }
+    /* تخصيص شكل السكرول */
+.menu::-webkit-scrollbar {
+  width: 2px; /* عرض الشريط */
 
+}
+
+/* خلفية الشريط */
+.menu::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px;
+}
+
+/* الجزء القابل للسحب */
+.menu::-webkit-scrollbar-thumb {
+  background: #2fa85a; /* اللون الأساسي */
+  border-radius: 10px;
+}
+
+/* لما المستخدم يحط الماوس عليه */
+.menu::-webkit-scrollbar-thumb:hover {
+  background: #238746; 
+}
     .menu a {
       display: flex;
       align-items: center;
@@ -174,11 +203,13 @@
 <body>
   <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">☰</button>
   <div class="sidebar" id="sidebar">
-    <div class="menu">
       <h2>Menu</h2>
+    <div class="menu">
+
 
       {% if data.role.can_create_orders == True%}
       <a href="{% url 'home'%}">🏠 Home</a>
+      <a href="{% url 'show_cart'%}">🛒 Cart</a>
       <a href="#">📦 Orders</a>
       {% endif%}
       {% if data.role.can_add_users == True%}

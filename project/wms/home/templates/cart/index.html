@@ -1,0 +1,117 @@
+{% extends 'base/index.html'%}
+{% load static%}
+{% block style%}
+   :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --muted:#64748b;
+      --accent:#2563eb;
+      --danger:#ef4444;
+      --radius:12px;
+      --gap:16px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Naskh Arabic', Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#0f172a;padding:16px}
+
+    header{display:flex;flex-direction:column;align-items:center;margin-bottom:16px;gap:6px;text-align:center}
+    header h1{font-size:22px;margin:0}
+    header div{color:var(--muted);font-size:14px}
+
+    .cartpage-container{display:flex;flex-direction:row;gap:24px;justify-content:center;flex-wrap:wrap;align-items:flex-start}
+    section.cartpage-products{flex:1 1 400px;min-width:280px}
+    .cartpage-products-list{display:flex;flex-direction:column;gap:12px}
+
+    .cartpage-product{background:var(--card);border-radius:var(--radius);display:flex;padding:12px;gap:12px;align-items:center;box-shadow:0 6px 18px rgba(15,23,42,0.06);flex-wrap:wrap}
+    .cartpage-thumb{width:96px;height:72px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#e2e8f0,#c7d2fe);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:600}
+    .cartpage-thumb img{width:96px;height:72px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#e2e8f0,#c7d2fe);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:600}
+
+    .cartpage-meta{flex:1 1 150px;min-width:0}
+    .cartpage-meta h3{margin:0 0 6px 0;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .cartpage-meta p{margin:0;font-size:13px;color:var(--muted)}
+    .cartpage-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end;width:100%}
+    .cartpage-qty{display:inline-flex;align-items:center;border-radius:8px;overflow:hidden;background:#f1f5f9}
+    .cartpage-qty button{border:0;background:transparent;padding:8px 10px;cursor:pointer;font-weight:700}
+    .cartpage-qty input{width:40px;border:0;text-align:center;padding:6px 4px;background:transparent}
+    .cartpage-remove{background:transparent;border:0;color:var(--danger);cursor:pointer;font-size:13px}
+
+    .cartpage-summary{background:var(--card);padding:18px;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,0.08);flex:0 0 300px;min-width:260px}
+    .cartpage-summary h2{margin:0 0 8px 0;font-size:18px}
+    .cartpage-checkout{display:block;margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;text-align:center;font-weight:700}
+
+    #cartpage-clear{padding:10px;border-radius:8px;border:0;cursor:pointer;background:#fee2e2;color:var(--danger);margin-top:12px}
+
+    @media (max-width:768px){
+      .cartpage-container{flex-direction:column;align-items:center;gap:16px}
+      .cartpage-summary{width:100%;flex:1 1 auto}
+      .cartpage-product{flex-direction:column;align-items:flex-start}
+      .cartpage-actions{align-items:flex-start;width:100%}
+    }
+{% endblock style%}
+{% block Content%}
+ <header>
+    <h1>سلة التسوق</h1>
+    <div> تعديل الكميات وإزالة المنتجات</div>
+  </header>
+
+  <main class="cartpage-container">
+    <section class="cartpage-products">
+      <div class="cartpage-products-list" id="products">
+            {% for item in data.extra.items%}
+    <article class="cartpage-product" item-id='{{item.id}}'>
+      <div class="cartpage-thumb"><img src='{{item.product.product.image_url.url}}'></img></div>
+      <div class="cartpage-meta">
+        <h3 class="title">{{item.product.product.name}} </h3>
+        <p class="desc">color :{{item.product.color.color.name}}</p><p>size : {{item.product.size}}</p>
+        <p>max qty : {{item.product.quantity}}</p>
+      </div>
+      <div class="cartpage-actions">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="cartpage-qty" item-id='{{item.id}}'>
+            <button class="dec">−</button>
+            <input class="qVal" type="number" item-id='{{item.id}}' min="1" value="{{item.quantity}}" readonly />
+            <button class="inc">+</button>
+          </div>
+          <button item-id='{{item.id}}'class="cartpage-remove">إزالة</button>
+        </div>
+      </div>
+    </article>
+
+  
+  {% endfor %}
+      </div>
+      <button id="cartpage-clear">إفراغ السلة</button>
+    </section>
+
+    <aside class="cartpage-summary" id="cartPanel">
+      <h2>ملخص الطلب</h2>
+      <div id="cartItemsBrief" style="width:100%"></div>
+      <a href="#" class="cartpage-checkout" id="checkoutBtn">إتمام الطلب</a>
+    </aside>
+  </main>
+
+  <template id="productTpl">
+    <article class="cartpage-product">
+      <div class="cartpage-thumb">IMG</div>
+      <div class="cartpage-meta">
+        <h3 class="title">عنوان المنتج</h3>
+        <p class="desc">وصف قصير للمنتج أو مواصفاته</p>
+      </div>
+      <div class="cartpage-actions">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="cartpage-qty">
+            <button class="dec">−</button>
+            <input class="qVal" type="number" min="1" value="1" readonly />
+            <button class="inc">+</button>
+          </div>
+          <button item-id="4" class="cartpage-remove">إزالة</button>
+        </div>
+      </div>
+    </article>
+  </template>
+{% endblock Content%}
+{% block scripts%}
+  <script src='{% static "js/cart.js"%}'>
+
+  </script>
+{% endblock scripts%}
