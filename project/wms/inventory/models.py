@@ -61,7 +61,7 @@ class ProductStock(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     color = models.ForeignKey(ProductColor, on_delete=models.CASCADE)
     size = models.IntegerField()
-    quantity = models.IntegerField()
+    quantity = models.PositiveIntegerField()
     def __str__(self):
         return f"prduct {self.product} - color {self.color} - size {self.size} - quantity {self.quantity}"
 

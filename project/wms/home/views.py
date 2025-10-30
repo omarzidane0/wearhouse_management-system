@@ -163,3 +163,11 @@ def show_cart(request):
         return render(request , 'cart/index.html' , context(user , data))
     else:
         return redirect(user.role.home_href)
+
+@session_req_v
+def show_orders(request):
+    user = request.user_obj
+    if user.role.can_create_orders:
+        return render(request , 'orders/orders.html' , context(user))
+    else:
+        return redirect(user.role.home_href)

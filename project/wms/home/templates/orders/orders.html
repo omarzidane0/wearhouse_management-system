@@ -1,0 +1,58 @@
+{% extends 'base/index.html'%}
+{% load static%}
+{% block style%}
+    /* Scoped CSS to prevent conflicts with other site styles */
+    #ordersApp_body { font-family: 'Noto Naskh Arabic', sans-serif; background: #f0f3f9; margin: 0; padding: 0; }
+    #ordersApp_container {  direction: rtl; max-width: 900px; margin: 50px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 30px; }
+    #ordersApp_container h1 { text-align: center; color: #1f2937; margin-bottom: 30px; }
+    #ordersApp_ordersList { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .ordersApp_orderCard { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all .3s ease; cursor: pointer; }
+    .ordersApp_orderCard:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .ordersApp_orderHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .ordersApp_orderId { font-weight: bold; color: #111827; }
+    .ordersApp_badge { padding: 6px 12px; border-radius: 10px; font-weight: 600; font-size: 13px; }
+    .ordersApp_badge.pending { background: #fff4e6; color: #d97706; }
+    .ordersApp_badge.shipped { background: #e0f2fe; color: #0369a1; }
+    .ordersApp_badge.approved { background: #dcfce7; color: #15803d; }
+    .ordersApp_badge.refused { background: #fcd5d5; color: #b91c1c; }
+    .ordersApp_badge.Cancelled { background: #fcd5d5; color: #b91c1c; }
+
+    #ordersApp_details { display: none; margin-top: 30px; border-top: 2px solid #e5e7eb; padding-top: 20px; }
+    .ordersApp_detailRow { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e5e7eb; }
+    .ordersApp_detailRow:last-child { border-bottom: none; }
+    .ordersApp_detailLabel { color: #4b5563; font-weight: 600; }
+    .ordersApp_detailValue { color: #111827; }
+    .ordersApp_backBtn, .ordersApp_cancelBtn { margin-top: 20px; padding: 12px 18px; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; transition: 0.2s; }
+    .ordersApp_backBtn { background: #1f7aec; color: #fff; }
+    .ordersApp_backBtn:hover { background: #155ac0; }
+    .ordersApp_cancelBtn { background: #ef4444; color: #fff; margin-left: 10px; }
+    .ordersApp_cancelBtn:hover { background: #b91c1c; }
+    #ordersApp_itemsList { margin-top: 15px; border-top: 1px dashed #e5e7eb; padding-top: 15px; }
+    .ordersApp_item { padding: 8px 0; display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; }
+    .ordersApp_item:last-child { border-bottom: none; }
+{% endblock style%}
+{% block Content%}
+  <div id="ordersApp_container">
+    <h1>طلبـــــــاتـــــي</h1>
+    <div id="ordersApp_ordersList">جارٍ تحميل الطلبات...</div>
+
+    <div id="ordersApp_details">
+      <h2>تفاصيل الطلب</h2>
+      <div class="ordersApp_detailRow"><div class="ordersApp_detailLabel">رقم الطلب:</div><div class="ordersApp_detailValue" id="ordersApp_d_id"></div></div>
+      <div class="ordersApp_detailRow"><div class="ordersApp_detailLabel">الحالة:</div><div class="ordersApp_detailValue ordersApp_badge" id="ordersApp_d_status"></div></div>
+      <div class="ordersApp_detailRow"><div class="ordersApp_detailLabel">تاريخ الطلب:</div><div class="ordersApp_detailValue ordersApp_badge" id="ordersApp_d_date"></div></div>
+      <div class="ordersApp_detailRow"><div class="ordersApp_detailLabel">اسم السائق:</div><div class="ordersApp_detailValue" id="ordersApp_d_driver"></div></div>
+      <div class="ordersApp_detailRow"><div class="ordersApp_detailLabel">الهاتف:</div><div class="ordersApp_detailValue" id="ordersApp_d_phone"></div></div>
+      <div class="ordersApp_detailRow"><div class="ordersApp_detailLabel">الأيميل:</div><div class="ordersApp_detailValue" id="ordersApp_d_email"></div></div>
+      <div id="ordersApp_itemsList"></div>
+      <div>
+        <button class="ordersApp_backBtn" id="ordersApp_backBtn">رجوع إلى الطلبات</button>
+        <button class="ordersApp_cancelBtn" id="ordersApp_cancelBtn">إلغاء الطلب</button>
+      </div>
+    </div>
+  </div>
+{% endblock Content%}
+{% block scripts%}
+  <script src="{% static 'js/order.js'%}">
+  </script>
+{% endblock scripts%}

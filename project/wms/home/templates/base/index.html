@@ -210,7 +210,7 @@
       {% if data.role.can_create_orders == True%}
       <a href="{% url 'home'%}">🏠 Home</a>
       <a href="{% url 'show_cart'%}">🛒 Cart</a>
-      <a href="#">📦 Orders</a>
+      <a href="{% url 'order_v'%}">📦 Orders</a>
       {% endif%}
       {% if data.role.can_add_users == True%}
       <a href="{% url 'add_users'%}">➕👤 Add User</a>

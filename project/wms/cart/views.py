@@ -20,6 +20,8 @@ def add_cart_item(request):
     qty = data.get('qty')
     if qty.strip() == "" or product_id.strip() == "":
         return JsonResponse({'status':False , 'reason':"an error please retry again"})
+    if int(qty) == 0:
+        return JsonResponse({'status':False , 'reason':'qty must be at least 1'})
     product = ProductStock.objects.filter(id=product_id)
     if product.exists():
         product = product.first()
@@ -62,7 +64,9 @@ def update_cart_item(request , id):
             if int(new_qty) < 1:
                 return JsonResponse({'status':False , 'reason':'qty must be at least 1'})
             elif int(new_qty) > cart_i.product.quantity :
-                return JsonResponse({'status':False , 'reason':f'you cant go above {cart_i.product.quantity}'})
+                cart_i.quantity = cart_i.product.quantity
+                cart_i.save()
+                return JsonResponse({'status':False ,'changed':True ,'new_num':cart_i.quantity, 'reason':f'you cant go above {cart_i.product.quantity}'})
             else:
                 cart_i.quantity = int(new_qty)
                 cart_i.save()

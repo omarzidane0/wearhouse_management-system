@@ -96,6 +96,9 @@ async function update_item(id , val , qty_input) {
     if (data.status){
         qty_input.value = val
     }else{
+        if (data.changed){
+            qty_input.value = data.new_num
+        }
         alert(data.reason)
     }
 }
@@ -110,4 +113,20 @@ async function update_item(id , val , qty_input) {
         })
 
     });
-    document.getElementById('checkoutBtn').addEventListener('click',(e)=>{ e.preventDefault(); alert('تم تقديم الطلب'); });
+    document.getElementById('checkoutBtn').addEventListener('click',(e)=>{ e.preventDefault();
+        order_push()
+        ; });
+
+async function order_push() {
+    let response = await fetch('/orders/push' , {method : 'POST' , headers:{            'Content-Type': 'application/json',
+            'X-CSRFToken':getCookie('csrftoken')}})
+    let data = await response.json()
+    if(data.status){
+        document.querySelectorAll(`article`).forEach(elm =>{
+            elm.remove()
+        })
+        alert('تم تقديم الطلب')
+    }else{
+        alert(data.reason)
+    }
+}

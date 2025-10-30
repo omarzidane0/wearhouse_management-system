@@ -12,6 +12,7 @@ class Roles(models.Model):
     can_create_orders = models.BooleanField(default=False)
     can_deliver_orders = models.BooleanField(default=False)
     can_add_products = models.BooleanField(default=False)
+    can_manage_orders = models.BooleanField(default=False)
     home_href = models.CharField(max_length=20 , default="home")
     def __str__(self):
         return f"Role is {self.role}"
